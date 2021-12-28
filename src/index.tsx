@@ -1,37 +1,56 @@
 import React, { ReactNode } from 'react';
-import { Button, Tooltip } from '@arco-design/web-react';
-import { ButtonProps } from '@arco-design/web-react/es/Button';
+import { Divider, Dropdown, DropdownProps, Menu } from '@arco-design/web-react';
 
 /**
- * @title TooltipButton
+ * @title ContextMenu
  */
-export interface TooltipButtonProps {
-  children?: any;
+
+export type ItemType =
+  | {
+      text: ReactNode;
+      key: string;
+      type: 'item';
+      children?: ItemType[];
+    }
+  | { type: 'divider' };
+export interface ContextMenuProps extends DropdownProps {
+  children: any;
   /**
-   * @zh 按钮的标题
-   * @default `Hello Arco`
-   * @version 1.0.0
+   * @zh 菜单项
    */
-  title?: ReactNode;
-  /**
-   * @zh 按钮的提示
-   */
-  btnProps?: ButtonProps;
+  items?: ItemType[];
+  onClickItem?: (key: string) => void;
 }
 
-const TooltipButton = (props: TooltipButtonProps) => {
-  const { children, title = 'Hello Arco', btnProps } = props;
+const ContextMenu = (props: ContextMenuProps) => {
+  const { children, items, onClickItem, ...rest } = props;
+
+  const loopItems = (_items: ItemType[], parentKey) => {
+    return _items.map((item, index) => {
+      if (item.type === 'divider') {
+        return <Divider className="arco-context-menu-divider" />;
+      }
+      if (item.children && item.children.length) {
+        return (
+          <Menu.SubMenu key={item.key} title={item.text}>
+            {loopItems(item.children, item.key)}
+          </Menu.SubMenu>
+        );
+      }
+      return <Menu.Item key={item.key || `${parentKey || ''}_${index}`}>{item.text}</Menu.Item>;
+    });
+  };
+
+  const droplist = (
+    <Menu className="arco-context-menu" onClickMenuItem={onClickItem}>
+      {loopItems(items, '')}
+    </Menu>
+  );
   return (
-    <div className="arco-rc-tooltip-button">
-      {title ? (
-        <Tooltip content={title}>
-          <Button {...btnProps}>{children}</Button>
-        </Tooltip>
-      ) : (
-        <Button {...btnProps}>{children}</Button>
-      )}
-    </div>
+    <Dropdown trigger="contextMenu" droplist={droplist} {...rest}>
+      {children}
+    </Dropdown>
   );
 };
 
-export default TooltipButton;
+export default ContextMenu;

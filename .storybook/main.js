@@ -24,7 +24,10 @@ function getLoaderForStyle(isCssModule) {
 module.exports = {
   stories: ['../stories/*.@(js|jsx|ts|tsx)'],
   webpackFinal: (config) => {
-    config.resolve.alias['context-menu'] = path.resolve(__dirname, '../src');
+    config.resolve.alias['@arco-design/context-menu'] = path.resolve(
+      __dirname,
+      '../src'
+    );
 
     // 支持 import less
     config.module.rules.push({

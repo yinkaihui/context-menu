@@ -1,6 +1,6 @@
 {
-  "name": "context-menu",
-  "version": "0.1.0",
+  "name": "@arco-design/context-menu",
+  "version": "0.1.2",
   "description": "",
   "main": "./lib/index.js",
   "module": "./es/index.js",
