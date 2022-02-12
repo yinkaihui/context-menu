@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Divider, Dropdown, DropdownProps, Menu } from '@arco-design/web-react';
+import { Divider, Dropdown, DropdownProps, Menu, MenuProps } from '@arco-design/web-react';
 
 /**
  * @title ContextMenu
@@ -19,7 +19,7 @@ export interface ContextMenuProps extends DropdownProps {
    * @zh 菜单项
    */
   items?: ItemType[];
-  onClickItem?: (key: string) => void;
+  onClickItem?: MenuProps['onClickMenuItem'];
 }
 
 const ContextMenu = (props: ContextMenuProps) => {
